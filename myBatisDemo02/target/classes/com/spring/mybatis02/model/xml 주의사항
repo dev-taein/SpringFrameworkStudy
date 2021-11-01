@@ -1,0 +1,30 @@
+<!-- DAO위치 -->
+<mapper namespace="com.spring.mybatis02.model.MybatisMemberMapper">
+<!-- resultType를 쓰는이유는 : DB의컬럼명이 DTO변수이름과 같음 -->
+	<select id="getAllMember" resultType="com.spring.mybatis02.model.MybatisMember">
+		SELECT * FROM mybatis_member
+	</select>
+	
+	<!-- parameterType는 getMember()의 매개변수 타입 -->
+	<select id="getMember" resultType="com.spring.mybatis02.model.MybatisMember"
+		parameterType="String">
+		SELECT * FROM mybatis_member WHERE id = #{id}
+	</select>
+	
+	<!-- resultType이 없는 경우는 insertMember()의 리턴타입이 void이므로 반환값이 없다. -->
+	<insert id="insertMember" parameterType="com.spring.mybatis02.model.MybatisMember">
+		INSERT INTO MYBATIS_MEMBER VALUES(#{id},#{pwd},#{name},#{tel},#{email}) 
+	</insert>
+</mapper>
+
+<!-- g.springframework.beans.factory.BeanCreationException: Error creating bean with name 
+	 위의 에러 발생시 servlet.xml의 패키지명이 잘못되었던가
+	 xml파일의 오타가 있을 수 있다.
+ -->
+ 
+ <!-- javax.xml.bind.JAXBException 예외 발생 시 추가 -->
+		<dependency>
+		    <groupId>javax.xml.bind</groupId>
+		    <artifactId>jaxb-api</artifactId>
+		    <version>2.3.0</version>
+		</dependency>

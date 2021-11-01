@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+
+
+
+<!-- expression="within(com.test.aop.*)"는 within()영역안에 있는 모든 메서드를 지정한다. -->
+	<bean id="adviceLog" class="com.test.aop3.AdviceLog" />
+	
+	<!-- aop around -->
+		<aop:config>
+			<aop:aspect id="profile" ref="adviceLog">
+				<aop:pointcut expression="within(com.test.aop3.*)" id="pcMethod"/>
+				<aop:around method="profile" pointcut-ref="pcMethod"/>
+			</aop:aspect>
+		</aop:config>
+		
+	<!-- aop before -->	
+		<aop:config>
+			<aop:aspect id="profile" ref="adviceLog">
+				<aop:pointcut expression="within(com.test.aop3.*)" id="pcMethod"/>
+				<aop:before method="beforeAdvice" pointcut-ref="pcMethod"/>
+			</aop:aspect>
+		</aop:config>
+		
+	<!-- aop after-returning  -->	
+		<aop:config>
+			<aop:aspect id="profile" ref="adviceLog">
+				<aop:pointcut expression="within(com.test.aop3.*)" id="pcMethod"/>
+				<aop:after-returning method="afterReturningAdvice" pointcut-ref="pcMethod"/>
+			</aop:aspect>
+		</aop:config>
+		
+	<!-- aop afterThrowingAdive -->	
+		<aop:config>
+			<aop:aspect id="profile" ref="adviceLog">
+				<aop:pointcut expression="within(com.test.aop3.*)" id="pcMethod"/>
+				<aop:after-throwing method="afterThrowingAdive" pointcut-ref="pcMethod"/>
+			</aop:aspect>
+		</aop:config>
+		
+	<!-- aop afterAdvice -->	
+		<aop:config>
+			<aop:aspect id="profile" ref="adviceLog">
+				<aop:pointcut expression="within(com.test.aop3.*)" id="pcMethod"/>
+				<aop:after method="afterAdvice" pointcut-ref="pcMethod"/>
+			</aop:aspect>
+		</aop:config>
+	
+	<bean id="student" class="com.test.aop3.Student">
+		<property name="name" value="강길동" />
+		<property name="hackbun" value="201601033" />
+		<property name="age" value="16" />
+		<property name="grade" value="3" />
+	</bean>
+	
+	<bean id="staff" class="com.test.aop3.Staff">
+		<property name="name" value="장발장" />
+		<property name="age" value="34" />
+		<property name="dept" value="장부" />
+	</bean>
+</beans>

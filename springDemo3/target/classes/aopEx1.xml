@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+	
+	<!-- expression="within(com.test.aop.*)"는 within()영역안에 있는 모든 메서드를 지정한다. -->
+	<bean id="adviceLog" class="com.test.aop.AdviceLog" />
+		<aop:config>
+			<aop:aspect id="profile" ref="adviceLog">
+				<aop:pointcut expression="within(com.test.aop.*)" id="pcMethod"/>
+				<aop:around method="profile" pointcut-ref="pcMethod"/>
+			</aop:aspect>
+		</aop:config>
+	
+	<bean id="student" class="com.test.aop.Student">
+		<property name="name" value="강길동" />
+		<property name="hackbun" value="201601033" />
+		<property name="age" value="16" />
+		<property name="grade" value="3" />
+	</bean>
+	
+	<bean id="staff" class="com.test.aop.Staff">
+		<property name="name" value="장발장" />
+		<property name="age" value="34" />
+		<property name="dept" value="장부" />
+	</bean>
+</beans>

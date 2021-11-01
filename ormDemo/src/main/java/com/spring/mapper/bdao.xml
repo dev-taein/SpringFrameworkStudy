@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <!-- namespace는 사용할 패키지의 클래명을 적는다. -->
+<mapper namespace="com.spring.ormDAO.BDAO">
+	<!-- id값은 BDAO의 인터페이스의 추상메서드명을 적는다. (id="" 비어있으면 에러) -->
+	<!-- resultType는 list가 참조하는 타입,즉 BVO의 패키지명과 클래스명을 적는다. -->
+  <select id="list" resultType="com.spring.ormVO.BVO">
+	select * from mybatis_bbs order by bId desc
+  </select>
+  
+  <!-- ?대신 #{param}이나 ${param}를 쓴다. $는 무조건 데이터형식에 상관없이 데이터를 넣는다.-->
+  <insert id="writeOk"> <!-- BDAO인터페이스에서 메서드명 틀리면 에러남(org.apache.ibatis.binding.BindingException) -->
+  	insert into mybatis_bbs(bId, bName, bContent) values(seq_mybatis_bbs.nextval,#{param1},#{param2})
+  </insert>
+  
+  <delete id="delete">
+	delete from mybatis_bbs where bId = #{param1}
+  </delete>
+</mapper>

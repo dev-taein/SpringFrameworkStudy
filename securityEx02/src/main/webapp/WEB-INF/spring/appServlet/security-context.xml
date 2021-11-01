@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+
+<!-- 리소스 권한 설정 login.html의 권한은 ROLE_USER만 허용 
+	스프링 시큐리티와 스프링 버전이 다르면 빈을 찾을 수없는 예외가 발생함.. (pom.xml의 springframework의 버전과 spring-security설정한 버전이 같아야함)
+	그리고 주석을 <>코드 옆에 달면 안좋음
+ -->
+	<security:http auto-config="true">
+	<!-- login-page스프링이 제공하는 로그인페이지가 아닌 내가 직접만든 로그인 페이지를 연결함
+			authentication-failure-url 로그인 실패 페이지 설정  -->
+		<security:form-login login-page="/loginPage.html" authentication-failure-url="/loginPage.html?fail" />
+		<!-- pattern="/login.html*" login.html페이지는 access="ROLE_USER"의 권한으로 부여한 계정만 로그인 성공시 이 페이지로 넘어간다. -->
+		<security:intercept-url pattern="/login.html*" access="ROLE_USER" /> 
+		<security:intercept-url pattern="/welcome.html*" access="ROLE_ADMIN" />
+	</security:http>
+	
+	
+	<security:authentication-manager>
+		<security:authentication-provider>
+			<security:user-service>
+				<security:user name="guest" password="guest" authorities="ROLE_USER" />
+				<security:user name="admin" password="1234" authorities="ROLE_ADMIN, ROLE_USER" />
+			</security:user-service>
+		</security:authentication-provider>		
+	</security:authentication-manager>
+</beans> 

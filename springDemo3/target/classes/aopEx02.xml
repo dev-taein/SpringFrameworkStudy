@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+	
+	
+	
+	
+	
+	<bean id="service" class="com.test.aop2.ServiceImpl" />
+	<!-- POJO(일반적인 자바)로 구현된 Advice 빈설정-->
+	<bean id="loggingAdvice" class="com.test.aop2.loggingAdvice" />
+	<bean id="TimeCheckAdvice" class="com.test.aop2.TimeCheckAdvice" />
+	
+	<!-- AOP 설정
+			ServiceImpl의 모든 메서드에 loggingAdvice의 logging()기능이 메서드 수행전에 적용되도록 설정-->
+		<aop:config>
+			<aop:aspect ref="loggingAdvice">
+			
+				<!-- before는 메서드 수행 직전, pointcut은 수행지점 
+				execution(* com.test.aop2.ServiceImpl.*()) 해당 클래스에 매개변수가 없는 모든 메서드를 참조하겠다. -->
+				
+				<aop:before method="logging" pointcut="execution(* com.test.aop2.ServiceImpl.*())"/>
+			</aop:aspect>
+		</aop:config>
+		
+		
+		
+	<!-- AOP 설정 : aop:around일 경우 주의필요(해당 advice에서 joinPoint.proceed()코드가 반드시 필요하다. 전과후가 존재하기때문에  -->
+	
+		<aop:config>
+			<aop:aspect ref="TimeCheckAdvice">
+				<aop:around method="check" pointcut="execution(* com.test.aop2.ServiceImpl.*())"/>
+			</aop:aspect>
+		</aop:config>
+
+</beans>

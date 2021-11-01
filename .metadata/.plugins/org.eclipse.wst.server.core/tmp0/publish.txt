@@ -1,0 +1,4 @@
+#Tomcat publish data
+#Mon Aug 23 00:37:29 KST 2021
+org.eclipse.jst.jee.server\:/binary\:C\:\\Users\\pc1\\.m2\\repository\\org\\springframework\\spring-web\\4.3.1.RELEASE\\spring-web-4.3.1.RELEASE.jar=C\:\\Program Files\\Apache Software Foundation\\Tomcat 9.0\\wtpwebapps\\startPrj\\WEB-INF\\lib\\spring-web-4.3.1.RELEASE.jar
+org.eclipse.jst.jee.server\:startPrj=C\:\\Program Files\\Apache Software Foundation\\Tomcat 9.0\\wtpwebapps\\startPrj

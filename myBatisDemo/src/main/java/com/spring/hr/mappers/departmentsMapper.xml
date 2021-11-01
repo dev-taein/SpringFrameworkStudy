@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.spring.hr.model.DepartmentsMapper">
+
+  <!-- resultType: DTO(Department.java)파일과 DB의 테이블의 컬럼명이 서로 같을 때 사용 >> resultType="Department"
+  	   resultMap: DTO(Department.java)파일과 DB의 테이블의 컬럼명이 서로 다를때 사용 >> <resultMap><result/></resultMap>
+  	 -->
+	<resultMap type="com.spring.hr.model.Department" id="DepartmentsResult"> <!-- type: DTO(Department.java)명, id:식별할수있는 이름 -->
+		<result column="department_id" property="deptId" /> <!-- column: DB의 컬럼명, property: 멤버변수로 선언한 이름 -->
+		<result column="department_name" property="deptName" />
+		<result column="manager_id" property="deptMgr" />
+		<result column="location_id" property="locationId" />
+	</resultMap>
+	
+  <select id="getDepartmentsInfo" resultMap="DepartmentsResult">
+  	select * from departments order by department_id
+  </select>
+</mapper>

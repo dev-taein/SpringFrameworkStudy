@@ -1,0 +1,207 @@
+[스프링 게시판 개요]
+
+게시판 프로젝트 구성
+
+패키지 : bbsCommand, bbsController, bbsDAO, bbsVO(DTO)
+
+ *bbsCommand(커맨드 패키지)  : 커맨드 객체의 구성
+ 
+ 	-Bcmd.java(인터페이스) : 커맨드객체를 구현 인터페이스
+ 		public interface Bcmd {
+			void service(Model model);
+		}
+
+	-ListCmd.java : 게시판의 리스트(목록) DB로부터 가져오는 객체
+	public class ListCmd implements Bcmd {
+		@Override
+		public void service(Model model) {
+			BDAO dao = new BDAO();
+			ArrayList<BVO> bVOs = dao.list();
+			model.addAttribute("list", bVOs);
+		}
+	}
+
+	-WriteCmd.java : 글 등록 처리
+	public class WriteCmd implements Bcmd{
+		@Override
+		public void service(Model model) {
+			Map<String, Object> map = model.asMap();
+			HttpServletRequest request = (HttpServletRequest)map.get("request");
+			
+			String bName = request.getParameter("bName");
+			String bSubject = request.getParameter("bSubject");
+			String bContent = request.getParameter("bContent");
+			
+			BDAO dao = new BDAO();
+			dao.write(bName, bSubject, bContent);
+		}
+	}
+	
+	-ContentCmd.java : 글 내용 보기 처리
+		public class ContentCmd implements Bcmd {
+		@Override
+		public void service(Model model) {
+			Map<String, Object> map = model.asMap();
+			//request에서 넘어온 정보(bNo)를 받아준다
+			HttpServletRequest request = (HttpServletRequest) map.get("request");
+			//받아온 정보 값(bNo)를 넘겨줘야하는데 넘겨줄때는 list.jsp의
+			//<a href="contentView?bNo=${vo.bNo}"</a>로 넘겨준다
+			
+			//값을 받아준다.
+			String bNo = request.getParameter("bNo");
+			//내용을 가져와 주는 작업
+			BDAO dao = new BDAO();
+			BVO bVo = dao.contentView(bNo);
+			
+			model.addAttribute("contentView", bVo);
+		}
+	}
+	
+	-DeleteCmd.java : 삭제처리
+		public class DeleteCmd implements Bcmd{
+		@Override
+		public void service(Model model) {
+			Map<String, Object> map = model.asMap();
+			HttpServletRequest request = (HttpServletRequest) map.get("request");
+			
+			String bNo = request.getParameter("bNo");
+			BDAO bDAO = new BDAO();
+			bDAO.delete(bNo);
+		}
+}
+	-ModifyCmd.java : 수정처리(contentView.jsp파일에서 수정한 내용을 DB에 등록)
+		public class ModifyCmd implements Bcmd {
+		//DB작업을 전부 저장하는 코드
+		@Override
+		public void service(Model model) {
+			Map<String, Object> map = model.asMap();
+			
+			//request를 얻어 올 수 있는 이유는 
+			//컨트롤러에서 request객체를 만들 었기 때문이다.
+			HttpServletRequest request = (HttpServletRequest) map.get("request");
+			
+			//contentView.jsp에서 수정된 값을 가져옴
+			String bNo = request.getParameter("bNo");
+			String bName = request.getParameter("bName");
+			String bSubject = request.getParameter("bSubject");
+			String bContent = request.getParameter("bContent");
+			
+			BDAO bDAO = new BDAO();
+			bDAO.modify(bNo, bName, bSubject, bContent);
+		}
+	}
+	-ReplyCmd.java : 답글
+		public class ReplyCmd implements Bcmd{
+		@Override
+		public void service(Model model) {
+			Map<String, Object> map = model.asMap();
+			HttpServletRequest request = (HttpServletRequest) map.get("request");
+			
+			String bNo = request.getParameter("bNo");
+			String bName = request.getParameter("bName");
+			String bSubject = request.getParameter("bSubject");
+			String bContent = request.getParameter("bContent");
+			String bGroup = request.getParameter("bGroup");
+			String bStep = request.getParameter("bStep");
+			String bIndent = request.getParameter("bIndent");
+			
+			BDAO bDAO = new BDAO();
+			bDAO.replyOk(bNo, bName, bSubject, bContent, bGroup, bStep, bIndent);
+		}
+	}
+		
+	-ReplyViewCmd.java : 답글 내용보기
+		public class ReplyViewCmd implements Bcmd {
+		@Override
+		public void service(Model model) {
+			Map<String, Object> map = model.asMap();
+			HttpServletRequest request = (HttpServletRequest) map.get("request");
+			String bNo = request.getParameter("bNo");
+			
+			BDAO bDAO = new BDAO();
+			BVO bVO = bDAO.replyForm(bNo);
+			model.addAttribute("replyForm", bVO);
+		}
+	}
+		
+	
+	*bbsController(컨트롤러) 패키지 구성
+		-Bcontroller.java
+		
+	*bbsDAO 패키지 구성
+		-BDAO.java
+	*bbsVO	패키지 구성
+		-BVO.java
+		
+		
+	## 뷰
+		list.jsp : 게시판 리스트
+		writeForm.jsp : 글쓰기 폼 페이지
+		contentView.jsp : 내용 보기 페이지, 수정 폼 페이지, 삭제 폼 페이지
+		replyForm.jsp : 답글 쓰기 페이지
+		
+ [스프링 JDBC를 위한 템플릿]
+ . 기능 : Connection를 구하고, try-catch-finally로 자원을 관리하는 등의 중복된 코드를 제거		
+ . JDBC를 위한 세개의 템플릿 클래스 
+ 	1) JDBCTemplate : 스프링의 가장 기본적인 템플릿 색인된 파라미터(indexed parameter) 기반의 쿼리를 통해
+ 						데이터베이스에 액세스하는 기능을 제공
+ 	
+ 	2) NamedParameterJdbcTemplate : SQL과 값들을 색인된 파라미터 대신에 명명된 파라미터(named parameter)로 
+ 									바인딩하여 쿼리를 수행할 수 있게 해주는 JDBC 템플릿 클래스
+ 	
+ 	3) SimpleJdbcTemplate : 자바 5부터 지원하는 기능중에 오토박싱, 제네릭스, 가변 파라미터 목록등을 활용해서
+ 							쉽게 템플릿을 사용할 수 있도록 하는 템플릿 클래스(스프링 3.1에서 삭제됨)
+ 							
+ 	. 자바 1.4 이하의 버전에서는 사용할 수 없음.
+ 
+ 
+ 			
+ [jdbcTemplate 사용방법]
+ # pom.xml에서 라이브러리를 불러온다. : org.springframework.spring-jdbc 설정
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-jdbc</artifactId>
+		<version>4.1.4.RELEASE</version>
+	</dependency>
+	
+ # DataSource 설정 (servlet-context.xml)	
+	<beans:bean name="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<beans:property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<beans:property name="url" value="jdbc:oracle:thin:@localhost:1521:xe" />
+		<beans:property name="username" value="sys as sysdba" />
+		<beans:property name="password" value="admin1125" />
+	</beans:bean>
+ # JdbcTemplae 설정(servlet-context.xml)
+	<beans:bean name="template" class="org.springframework.jdbc.core.JdbcTemplate">
+		<beans:property name="dataSource" ref="dataSource" />
+	</beans:bean>		
+		
+		
+		
+	/*Jdbctemplate 사용할 수 있는 메소드
+	-query() 메소드 : select 쿼리문을 실행할 때 사용하는 메서드
+		:List query(String sql, Object[] args, RowMapper rowMapper)
+		:List query(String sql, RowMapper rowMapper)
+		
+		.BeanPropertyRowMapper<T> 클래스는 RowMapper<T> 인터페이스를 구현 했다.
+		.RowMapper<T> 인터페이스에서 정의하고 있는 메소드는 T mapRow(ResultSet rs, int rowNum) throws SQLException; 
+		//rowNum은 행번호(0부터 시작)
+		.mapRow() 메소드 - ResultSet에서 읽어온 값을 이용해서 원하는 타입의 객체를 생성한 뒤 리턴
+	
+	-queryForObject() 메소드 : 쿼리 실행 결과의 행의 개수가 한개인 경우에 사용하는 메소드
+		전달되는 각 파라미터가 query() 메소드와 동일하다. 대신 List를 반환하는 대신에 한 개의 객체를 리턴
+		리턴 되는 행(레코드)의 개수가 한개가 아닌 경우에는 IncorrectResultSizeDataAcessException 예외 발생
+	 : public Object queryForObject(String sql, RowMapper rowMapper)
+	 : public Object queryForObject(String sql, Object[] args, RowMapper rowMapper
+		리턴 타입이 Object가 아닌 경우에는 Int, Long 타입의 결과를 구할 때 사용하는 
+		queryForInt(), queryForLong()
+	
+	
+	-update() 메소드 : update, insert, delete 쿼리문을 실행할 때 사용하는 메소드
+		쿼리 실행결과 변경된 행의 개수를 리턴
+	 :update(String sql)
+	 :update(String sql, Object[] args)
+	
+	-execute()
+		.커넥션의 생성과 종료는 JdbcTemplate에서 처리하기 때문에 Connection을 종료하기 때문에 따로 사용할 필요가 없다.
+	*/

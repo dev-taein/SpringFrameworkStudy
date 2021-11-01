@@ -1,0 +1,68 @@
+[@Component]
+
+ @Controller는 @Component을 상속한다.
+servlet-context.xml 안에 <context:component-scan base-package=""/> 태그를 사용해서 스프링이 클래스(컴포넌트,컨트롤러)를 검색할 패키지를 지정한다.
+<context:component-scan base-package="" /> 태그는 base-package에서 지정한 패키지에서 @Component가 적용된 클래스를 검색해서 bean으로 자동 등록
+	# 따라서, XMl설정 파일이 다양한 빈 정보를 추가하지 않아도 된다.
+		*설정파일에서는 반드시 <context:annotation-config>태그를 사용한다.
+	
+	//빈 만들기 1
+	@Component("service01")
+	public class AbstractSvcImpl implements AbstarctSvc {
+		
+		private String name = "01";
+		
+		@Override
+		public String getClassName() {
+			// TODO Auto-generated method stub
+			return "AbstractSvcImpl - "  + name;
+		}
+	}
+	위의 코드를
+	설정파일<Bean>태그로 작성을 한다면
+	<bean id="service01" class="com.spring.annotationEx.AbstractSvcImpl"> 와 같은 방법이다.
+	--------------------------------------------------------------------------------------
+	
+	//빈만들기 2
+	@Component("service02")
+	public class AbstractSvcImpl02 implements AbstarctSvc {
+		
+		private String name = "02";
+		@Override
+		public String getClassName() {
+			return "AbstractSvcImpl - "  + name;
+		}
+	}
+	
+	위의 코드를
+	설정파일<Bean>태그로 작성을 한다면
+	<bean id="service02" class="com.spring.annotationEx.AbstractSvcImpl02"> 와 같은 방법이다.
+	
+	[@Resource]
+	 자바 6 및 JEE 5에 추가되었다.
+	 어플리케이션에서 필요로 하는 자원을 자동으로 연결할 때 사용한다. 스프링2.5부터 지원하는 어노테이션
+	 스프링에서는 의존하는 빈 객체를 전달 할 때 사용
+	 @Resource를 사용하려면 pom.xml에 api를 추가해야한다.
+	 <dependency>
+	    <groupId>javax.annotation</groupId>
+	    <artifactId>javax.annotation-api</artifactId>
+	    <version>1.3.2</version>
+	 </dependency>	
+	 
+	 설정파일에서는
+	 <context:annotation-config>태그를 사용해야 한다.
+	 대신에
+	 <bean class="org.springframework.beans.factory.annotation.CommonAnnotationBeanPostProcesser" />
+	 클래스를 빈으로 등록시켜 사용하는 방법이 있다.
+	 
+	-------------------------------------------------------------------------
+	
+	[@AutoWired]
+	 : 의존관계를 자동으로 설정한다.
+	 - 의존 관계 설정(type 기반, Resouㄱce는 name기반)
+	 - 생성자, 필드, 메소드에 적용 가능
+	 - set 계열의 메소드가 아닌 메소드에도 적용 가능
+	  
+	
+	
+	

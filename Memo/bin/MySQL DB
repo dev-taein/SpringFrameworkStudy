@@ -1,0 +1,12 @@
+springUser
+spring
+
+@Test는 jdk1.7이상부터 지원 
+프로젝트 우클릭 -> properties -> java compiler 1.8로변경 -> java facets 1.8로 변경
+
+
+mysql 사용하려면 https://downloads.mysql.com/archives/c-j/에서 커넥트 j다운받고 jar 등록해야함.
+
+그리고 타임존 설정해야함 --
+spring_prj?useSSL=false&serverTimezone=Asia/Seoul
+스키마이름?useSSL=false&serverTimezone=Asia/Seoul

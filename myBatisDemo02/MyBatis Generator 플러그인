@@ -1,0 +1,21 @@
+[MyBatis Generator 사용하기]
+
+-설치
+	.이클립스 Help > Install New Software
+	http://mybatis.googlecode.com/svn/sub-projects/generator/trunk/eclipse/UpdateSite/
+	
+	난 위에 방법으로 안되서
+	EclipsMarktPlace에서 mybatis 검색 -> mybatis generator 1.4 다운 받음
+	
+	
+-generator config 파일 생성
+	.file > new > other
+	myBatis generator configuration file을 선택한다.
+ 	ex> location :
+ 		file name : generator configuration
+ 		
+ 	generatorConfig.xml 작성 후 Run as -> mybatis run하면 자동으로 파일이 생성된다.
+ 	*프로젝트에 JDBC.jar 추가하던가 <context id="context1" targetRuntime="MyBatis3">을 설정
+ 	
+ 		
+ 

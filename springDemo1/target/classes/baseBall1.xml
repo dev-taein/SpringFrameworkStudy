@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="player1" class="com.test.diEx06.Player">
+	
+		<constructor-arg value="박병호" />
+		<constructor-arg value="28" />
+		
+		<!-- ArrayList은 list를 생성하여 리스트를 만들다. -->
+		<constructor-arg>
+			<list>
+				<value>4번</value>
+				<value>1루수</value>
+			</list>
+		</constructor-arg>
+		
+		
+		<!-- property name은 Player클래스의 setter의 값들 -->
+		<property name="height">
+			<value>188</value>
+		</property>
+		
+		<property name="weight">
+			<value>80</value>
+		</property>
+	</bean>
+	
+	<!-- set계열의 메서드를 호출하는 것과 같다. 위에서 선언한 player1를 호출함-->
+	<bean id="playerInfo1" class="com.test.diEx06.PlayerInfo">
+		<property name="player">
+			<ref bean="player1"/>
+		</property>
+	</bean>
+
+</beans>

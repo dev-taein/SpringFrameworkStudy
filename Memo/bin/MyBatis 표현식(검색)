@@ -1,0 +1,65 @@
+[MyBatis의 표현식]
+
+#if
+	-사용 예
+	<if test="content" != null">
+		SQL 명령 문...
+		
+	</if>
+	
+#choose(when, otherwise)
+	-사용 예
+	<choose>
+		<when test="content" != null ">
+			SQL 명령 문....
+		</when>
+		<when test="product != null and product.code != null">
+			SQL 명령 문....
+		</when>
+		<otherwise>
+			SQL 명령 문....
+		</otherwise>
+	</choose>
+	
+#trim(where, set)
+	-사용 예
+	update Member set userName = #{userName}, email = #{email}, tel = #{tel} where id = #{id}
+	만약에 userName이 없으면 null이면 수정하지 않고 email과 tel만 수정하겠다 = 동적 SQL = trim를 이용
+	
+	//prefix="set"는 email이 null이 아니면 값이 있으면 set email 이렇게 문이 생성됨
+	//suffixOverrides=","는 맨 끝에 (,)콤마를 제거하는 경우
+	
+	<update id="updateMember" parameterType="com.spring.xxxxVO">
+	 update Member
+	<trim prefix="set" suffixOverrides=",">
+		<if test=userName != null>userName =  #{userName},</if>
+		<if test=email != null>email = #{email},</if>
+		<if test=tel != null>tel = #{tel}</if>
+	</trim>
+	where id = #{id}
+	</update>
+	
+	
+	// 맨 앞에 있는 연산자를(AND/OR)제거하는 경우
+	<select id="selectInfo" parameterType="com.spring.xxxVO" resultType="memberResultMap">
+		select * from Employee where userId = #{userId} and pwd = #{pwd} and email = #{email}
+		아래코드는 위의 코드를 유동적으로 동적코드로 만듬
+		
+		<select id="selectInfo" parameterType="com.spring.xxxVO" resultType="memberResultMap">
+			select * from Employee
+				<trim prefix="where" prefixOverrides = "AND | OR">
+					<if test="userName != null">userName=#{userName}</if>
+					<if test="pwd != null">and pwd = #{pwd}</if>
+					<if test="email != null">and email = #{email}
+				</trim>
+		</select>
+		
+		//null문장은 제외하고 null이 아닌 것을 select하고 and와 or를 지워버림
+	
+	
+#forEach
+	
+	-사용 예
+	<foreach item="item" index="idx" collection="list" open="(" separator ="," close=")">
+		#{item}
+	</foreach>

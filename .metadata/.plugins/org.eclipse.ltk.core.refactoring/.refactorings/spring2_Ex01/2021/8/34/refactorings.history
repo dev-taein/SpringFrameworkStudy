@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;스프링MVC개요&apos; to &apos;Memo/src&apos;&#x0D;&#x0A;- Original project: &apos;spring2_Ex01&apos;&#x0D;&#x0A;- Destination element: &apos;Memo/src&apos;&#x0D;&#x0A;- Original element: &apos;스프링MVC개요&apos;" description="Copy file" destination="=Memo/src" element1="스프링MVC개요" files="1" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1629348691759" units="0" version="1.0"/>
+</session>

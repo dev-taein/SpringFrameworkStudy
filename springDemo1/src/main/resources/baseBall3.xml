@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/context
+						http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+
+	<!-- <context:annotation-config/> xml에서 자바코드를 사용할려면
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.2.xsd 를 추가해야함-->
+	<context:annotation-config/>
+	<bean class="com.test.diEx08.ConfigApp" />
+	
+	<bean id="player2" class="com.test.diEx08.Player">
+		<constructor-arg value="강경호" />
+		<constructor-arg value="55" />
+		<constructor-arg>
+			<list>
+				<value>25번 타자</value>
+				<value>유격수</value>
+			</list>
+		</constructor-arg>
+		<property name="height" value="199" />
+		<property name="weight" value="59" />
+	</bean>
+
+</beans>

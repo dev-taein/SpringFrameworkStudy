@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beansProjectDescription>
+	<version>1</version>
+	<pluginVersion><![CDATA[3.9.16.202103111701-RELEASE]]></pluginVersion>
+	<configSuffixes>
+		<configSuffix><![CDATA[xml]]></configSuffix>
+	</configSuffixes>
+	<enableImports><![CDATA[false]]></enableImports>
+	<configs>
+		<config>src/main/resources/test.xml</config>
+		<config>src/main/resources/getsum.xml</config>
+		<config>src/main/resources/examDao.xml</config>
+		<config>src/main/resources/person.xml</config>
+		<config>src/main/resources/myBatis.xml</config>
+		<config>src/main/resources/car.xml</config>
+		<config>src/main/resources/baseBall1.xml</config>
+		<config>src/main/resources/baseBall2.xml</config>
+		<config>src/main/resources/baseBall3.xml</config>
+	</configs>
+	<autoconfigs>
+	</autoconfigs>
+	<configSets>
+	</configSets>
+</beansProjectDescription>

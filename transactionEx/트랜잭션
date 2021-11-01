@@ -1,0 +1,33 @@
+[트랜잭션 전략]
+ :스프링에서 제공하는 프로그래밍적인 트랜잭션 관리 방법
+ 
+ #PlatformTransactionManager 사용하는 방법
+ 	-클래스 : org.springframework.jdbc.datasource.DataSourceTransactionManager
+ 	
+ 	-TransactionDefinition과 TransactionStatus 객체를 사용
+ 	. 트랜잭션 초기화
+ 	. 트랜잭션 커밋(commit), 롤백(rollback)
+ 
+ #TransactionTemplate 사용하는 방법
+ 	Callback 접근 방법을 사용하는 방식, 리소스 획득과 해제작업으로 부터 어플리케이션 코드를 해방시켜주는 방법
+ 	(try/catch/finall)를 할 필요가 없다.
+ 	콜백함수 호출은 호출이 되는 것이 아닌 호출이 되는것,, 어떤 이벤트가 발생했을때 나한테 알려줘(OS가 호출하는 기능)
+ 	일반함수 호출은 프로그래밍의 조건1에 해당하는 함수1에 작업을 맡김 조건2는 함수2에 맡김
+ 	
+ 	-TransactionCallback 인터페이스 구현 객체를 사용(리턴 값이 있는 경우)
+ 	 .doInTransaction() 메소드를 구현
+ 	
+ 	-TransationCallbackWithoutResult를 사용(리턴 값이 없는 경우)
+ 	 .doInTransaction() 메소드를 구현
+ 	 
+ 	 
+ [트랜잭션 전파(propagation)]
+  : 트랜잭션을 시작하거나 기존 트랜잭션에 참여하는 방법을 결정하는 것
+  
+  전파 속성 :
+  	.required(0) : default
+  	.supports(1) : 트랜잭션을 필요로 하지는 않지만 기존의 트랜잭션이 존재하는 경우에는 트랜잭션을 사용한다.
+  	.mandatory(2) : 트랜잭션이 꼭 필요하다. 진행중인 트랜잭션이 없을 경우 예외 발생
+  	.requires_new(3) : 각각 트랜잭션을 처리하는 것을 의미.
+  	.not_supported(4) : 트랜잭션을 필욜 하지 않는다. 기존의 트랜잭션이 존재하면 일시 중지하고 메소드 실행이 끝난 후에 트랜잭션을 계속 진행한다.
+  	.never(5) : 트랜잭션을 필요로 하지 않는다. 진행중인 트랜잭션이 존재하면 예외 발생

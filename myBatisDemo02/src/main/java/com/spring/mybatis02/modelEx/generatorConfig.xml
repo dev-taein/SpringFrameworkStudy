@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+	
+	<!-- oracle jdbc 드라이버 위치 설정(개발자 폴더에 있는 jdbc 위치) -->
+	<!-- <classPathEntry location="C:\Users\pc1\.m2\repository\com\oracle\ojdbc6\11.2.0.3\ojdbc6-11.2.0.3.jar.lastUpdated"/> -->
+ 
+  <context id="context1" targetRuntime="MyBatis3">
+    <jdbcConnection connectionURL="jdbc:oracle:thin:@localhost:1521:xe" 
+    driverClass="oracle.jdbc.driver.OracleDriver" 
+    password="1234" 
+    userId="hr" />
+    
+    <!-- 패키지명, 프로젝트명 설정 -->
+    <javaModelGenerator targetPackage="com.spring.mybatis02.model"  
+    targetProject="myBatisDemo02" />
+    
+    <sqlMapGenerator targetPackage="com.spring.mybatis02.model"
+     targetProject="myBatisDemo02" />
+    
+    <javaClientGenerator targetPackage="com.spring.mybatis02.model" 
+    targetProject="myBatisDemo02" 
+    type="XMLMAPPER" />
+    
+    <!-- schema 계정이름, tableName는 사용할 테이블명 -->
+    <table schema="hr" 
+    tableName="mybatis_member">
+      <!-- <columnOverride column="???" 
+      property="???" /> -->
+    </table>
+  </context>
+</generatorConfiguration>

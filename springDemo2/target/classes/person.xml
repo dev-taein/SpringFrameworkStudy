@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- scope는 생략시 기본값이 singleton -->
+	<bean id="person" class="com.test.ex02.Person" scope="prototype">
+		<constructor-arg value="김말똥" />
+		<constructor-arg value="15" />
+	</bean>
+</beans>

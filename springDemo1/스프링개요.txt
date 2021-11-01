@@ -1,0 +1,359 @@
+[스프링 개요]
+선수학습 : java, jsp/sevlet, 스크립트언어(html,javascript, jquery, css)
+
+개념 : 자바언어를 기반으로 한 어플리케이션을 제작할 때 효율적으로 빠르게 개발 할 수 있도록
+하는 어플리케이션 프레임워크이다.(프로그래밍 틀)
+
+##개발환경 구축
+
+1. JDK 설치(환경변수 설정)
+
+2. Eclipse(Java EE버전), STS (개발 툴 설치)
+
+3. 웹컨테이너 설치 : 톰캣 설치(7.0, 8.0) (이클립스 연동)
+
+	http://tomcat.apache.org
+
+  
+4. Eclipse에 스프링(STS) Plugin 설치	
+    STS 다운로드 URL 
+    http://spring.io/
+
+[스프링 프레임웍이란?]
+ * 스프링은 엔터프라이즈 어플리케이션에서 필요로하는 여러가지 기능들을 제공하는 프레임웍이다.
+ * J2E가 제공하는 기능들을 스프링에서 지원을 하고 있기 때문에 국내에서는 가장 인기 있는 프레임웍으로 자리를 잡았다.
+ * 스프링은 J2E에서 제공하는 기능 외에 DI나 AOP와 같은 기능을 지원한다.
+ 
+  ## 특징
+    > 스프링은 경량의 프레임워크
+      . 자바의 객체를 담고 있는 컨테이너
+      . 객체의 생성, 소멸과 같은 생명주기를 관리한다.
+  
+    > DI(Dependency Injection):의존성 주입 패턴을 지원한다.    
+      . 설정파일을 통해서 의존관계를 설정해 주는 패턴
+      
+    > AOP(Aspect Oriented Programming)을 지원
+      . 트랜잭션이나, 로깅, 보안과 같은 엔터프라이즈 어플리케이션에서 공통으로 필요로 하는 기능을 분리해서 
+        각 모듈에 적용할 수 있도록 하는 기능
+    
+    > 스프링은 POJO(Plain Old Java Object)를 지원한다.
+      .특정 인터페이스나 클래스를 상속받지 않는 순수한 자바 객체를 스프링 컨테이너가 저장하고 있다.
+      
+    > 트랜잭션 처리를 위한 일관된 방식을 제공한다.
+    
+    > 영속성과 관련된 다양한 API를 제공한다.
+     . JDBC, IBatis, MyBatis, JPA, Hibernate 등과 같은 프레임워크와 연동을 지원한다.
+     
+     
+[DI(Dependency Injection) 의존성 주입]
+
+ > DI 스프링의 핵심 개념 중의 하나이다.
+ > 객체 사이의 의존 관계를 객체 자신이 아닌 외부(스프링 컨테이너)에서 수행하는 개념
+ > 의존관계의 설정은 설정파일(bean.xml)이나 어노테이션을 이용하여 설정 한다.
+ 
+//AA 객체에서 BB객체를 생성 
+
+	public class AA {
+		BB bb = new BB();
+		
+		public void print(){
+			bb.aa();
+		}
+	}
+ 
+	public class BB {
+		public void aa(){
+			System.out.println("BB객체의 aa() 메소드 입니다!!!");
+		}
+	}
+     
+
+    AA는 BB에 의존한다. (AA has a BB)
+ 
+    
+   그렇다면 DI는
+     
+   의존하는 객체에 대한 획득을 클래스에서 하지 않고 스프링컨테이너가 주입(제공)해 준다.
+  다시 말하면, 개발자는 AA 클래스에서 BB bb = new BB()를 작성하지 않고 스프링 컨테이너가 
+  AA 클래스를 생성할 때 생성하는 BB클래스의 instance(bean)를 주입 받는다.     
+ 
+  설정은 xml 설정을 통해서 이루어진다.   
+ 
+ 
+   ## 인터페이스를 이용한 의존성을 낮춤:
+   
+    -------------   
+      service 객체                                                           인터페이스
+                        --------------------------->      DAO      
+      DAO dao                                         -------------
+                                                        ^       ^
+													    | 	    |
+    --------------                                     aDAO   bDAO
+    												     객체	   객체					
+     dao = new aDAO()                                                         
+     dao = new bDAO()                                                 
+   
+     위의 그림은 의존성이 낮아짐 
+   
+     코드의 변경 없이 xml의 설정만으로 개발자가 원하는 객체의 주입으로 바꿀 수 있음.
+   
+   
+   [의존성 주입 종류]
+    setter(설정 메소드)를 이용한 주입 
+    : 설정 메소드를 사용해서 의존성을 주입하는 것
+    
+    Constructor(생성자)를 통한 주입
+    : 생성자를 사용해서 의존성을 주입하는 것
+   
+   
+   [의존성 주입(DI)의 장점]
+	 DI를 사용하면 개발 계획시에 시간이 요구가 되지만, 규모가 큰 프로젝트에서 유지보수 업무를 
+	 한다면 DI 개발의 장점을 느낄 수 있다.  
+   
+   
+   [의존 관계 설정 방법]
+   - XML파일을 이용한 설정방법
+   
+   - JAVA를 이용한 설정방법(어노테이션을 이용한다. @Configuration, @Bean)
+     
+     : 어노테이션(Annotation:Metadata)-JDK5부터 등장한 개념 ex)@Override
+         선언시에는 @를 사용하여 선언한다.
+         어노테이션은	
+     	. 컴파일러에게 정보를 알려주거나
+     	. 컴파일 할 때와 설치(deployment)시의 작업을 지정하거나
+     	. 실행할 때 별도의 처리가 필요한 경우
+         사용한다.
+   		클래스, 메소드, 변수 등 모든 요소에 선언이 가능하다.
+   		
+       
+       # @Configuration : 클래스앞에 선언하는데, "이 클래스는 스프링 설정에 사용되는 클래스 입니다" 라고 알려주는 어노테이션
+       # @Bean : 메소드 앞에 선언, "객체를 생성"
+   		
+   		
+   - XML과 JAVA를 혼용해서 사용하는 방법 : XML파일과 JAVA파일을 같이 사용해서 스프링 설정을 하는 방법
+   
+   [스프링 컨테이너 생명 주기]
+      
+      스프링 컨테이너 생성   : GenericXmlApplicationContext ctx = new GenericXmlApplicationContext();
+       ------> 설정    :  ctx.load("classpath:baseBall.xml");
+                  	   ctx.refresh(); 
+       ------> 사용    :  Player player =ctx.getBean("player".Player.class); 
+      			      player.getName();
+      			      player.getPosition();			
+       ------> 종료    :ctx.close()
+   
+   
+   [빈 Life cycle(생명주기)]
+   
+   ctx.refresh 과정에서 빈이 생성 
+   ctx.close() 컨테이너가 소멸하는 단계에서 빈도 자동으로 소멸됩니다.
+    
+   InitializingBean 인터페이스
+   	구현해야 할 메소드
+   	public void afterPropertiesSet() throws Exception
+   	
+   DisposableBean 인터페이스
+    public void destroy() throws Exception  
+   
+   
+   InitializingBean, DisposableBean은 따로 구현 해도 되고, 동시에 구현해도 된다.
+   
+    # 어노테이션을 활용
+    @PostConstruct
+    public void initMethod(){}
+     
+    @PreDestroy    
+	public void destroyMethod(){}
+	
+   [빈의 범위(scope)]
+	범위는 해당하는 객체가 어디까지 영향을 미치는지 결정하는 것
+	
+	<bean> 태그의 속성 값 : default 값은 singleton
+	  singleton : 스프링 컨테이너에 의해 한개의 빈객체만 생성
+	  prototype : 빈을 사용할 때 마다 객체를 생성
+	  request : HTTP 요청 마다 빈 객체를 생성(WebApplicationContext에서만 적용)	
+	  session : HTTP 세션 마다 빈 객체를 생성(WebApplicationContext에서만 적용)
+	  global-session : 글로발 HTTP 세션에 대해 빈 객체를 생성. 
+	  
+	[커스텀 초기화 메소드/ 커스텀 소멸 메소드]  
+	
+	:객체의 생성과 소멸시에 특정 메소드를 실행시키고 싶을 때 사용한다.	 
+	 - init-method : 커스텀 초기화 메서드를 지정하는 <bean>태그의 속성
+	 - destroy-method : 커스텀 소멸 메서드를 지정하는 <bean>태그의 속성 
+	
+	** BeanNameAware 인터페이스
+	: 빈객체가 자기자신의 이름을 알아야 할 경우 사용된다.
+	: 클래스가 BeanNameAware 인터페이스를 구현한 경우 컨테이너는 setBeanName()메서드를 호출해서 빈객체의 이름을 전달
+	: setBeanName(String arg) : 객체가 생성될 때 해당 객체의 id나 name값을 전달 받는 메서드
+	
+	[외부 파일을 이용한 빈 설정]
+	 
+	 - EnvironmentAware, Envirionment 인터페이스를 활용	
+	  
+	  . Context  --> getEnvironment() -->Environment 객체 얻기
+	  . Environment  -->getPropertySources 객체를 얻기
+	  . PropertySources -->프로퍼티를 추가(addLast)하거나, 추출(getProperty) 작업을 한다.
+	
+	 
+	 - 프로퍼티 파일을 이용한 빈설정
+	  .XML 파일에 외부프로퍼티 파일을 명시하는 방법
+	  .Java 파일에 외부 프로퍼티 파일을 명시하는 방법(config)
+	 
+	 - 프로파일 속성(profile)을 이용한 빈설정
+	 
+    [IoC(Inversion of Control- 제어의 역전)란?]
+     : IoC란 프로그램의 제어 흐름 구조가 바뀌는 것
+     
+     ** 일반적인 프로그램의 흐름 구조는
+        main()과 같은 프로그램이 시작되는 지점에서 사용할 오브젝트를 결정, 생성하고, 생성된 오브젝트 내의 메소드를 
+            호출하는 작업을 반복하는 구조이다.
+             
+            즉, 모든 종류의 작업을 사용하는 쪽에서 제어하는 구조
+        
+        
+     ** IoC는 제어 흐름의 개념을 거꾸로 뒤집는 개념이다. 오브젝트는 자신이 사용할 오브젝트를 스스로 생성하거나 선택하지 않는다.
+            모든 제어 권한을 자신이 아닌 다른 대상에게 위임하는 것
+            프로그램의 시작을 담당하는 main()같은 엔트리 포인트를 제외하면 모든 오브젝트는 제어 권한을 위임받은 특별한 오브젝트에 의해 결정되고
+            만들어지는 것
+            
+        <IoC 개념 정리>
+        - 작업을 수행하는 쪽에서 Object를 생성하는 제어 흐름의 개념을 거꾸로 뒤집는 것.
+        - IoC에서는 Object가 자신이 사용할 Object를 생성하거나 선택하지 않는다.
+        - Object는 자신이 어떻게 생성되고 어떻게 사용되는 지 알 수 없다.
+        - 모든 Object는 제어권한을 위임받은 특별한 Object에 의해서 만들어지고 사용된다.    
+     
+     # IoC 구현방법
+     .DL (Dependency Lookup)  - 의존성 검색
+     	저장소에 저장되어 있는 빈(Bean)에 접근하기 위해서 개발자들이 컨테이너에서 제공하는 API를 이용하여
+     	빈(Bean)을 Lookup 하는 것
+     .DI(Dependency Injection) - 의존성 주입
+        DL을 사용시에는 컨테이너에 대한 종속성이 증가하기 때문에, 이러한 종속성을 줄이기 위해서 DI를 사용
+            각 계층 사이, 각 객체(클래스)사이에 필요로 하는 의존 관계를 컨테이너가 자동으로 연결 해주는 것
+     	각 클래스 사이의 의존 관계를 빈 설정(Bean Definition) 정보를 바탕으로 컨테이너가 자동으로 연결해주는 것
+     
+         - setter Injection
+         - constructor Injection
+    
+     ## IoC 용어 정리
+     .bean - 스프링에서는 제어권을 가지고 직접 만들고 관계를 부여하는 오브젝트
+     	자바빈, EJB의 빈과 비슷한 오브젝트 단위의 어플리케이션 컴포넌트를 의미.
+     	스프링 빈은 스프링 컨테이너가 생성, 관계설정, 사용등을 제어해주는 오브젝트를 가리킨다.
+     
+      .bean factory : 스프링의 IoC를 담당하는 핵심 컨테이너	
+          빈을 등록/ 생성/조회/반환/관리 한다. bean factory를 바로 사용하지 않고 이를 확장한 Application Context를 이용한다.  
+       BeanFactory는 bean factory가 구현하는 Interface 이다. (getBean()등의 메소드가 정의)  
+     
+      .application Context - bean Factory를 확장한 IoC 컨테이너 	
+          빈을 등록/생성/조회/반환/관리 기능과 함께 스프링의 각종 부가 서비스를 추가로 제공한다.
+       ApplicationContext는 interface이며 BeanFactory를 상속한다.
+     
+      .configuration metadata(설정정보/ 설정 메타정보)
+       application context 혹은 bean factory 가 Ioc를 적용하기 위해 사용하는 메타정보
+          스프링의 설정정보는 컨테이너에 어떤 기능을 설정하거나 조정하는 경우에 사용되기 하고, 주로  bean을 생성/구성하는 용도로 사용된다.
+          
+      . container(IoC container)    
+        IoC 방식으로 bean을 관리한다는 의미에서 bean factory나 application context를 가리킨다.
+        (spring container = application context)
+        application context는 그 자체로는 ApplicationContext인터페이스를 구현한 오브젝트를 의미한다.
+            하나의 어플리케이션에서는 보통 여러 개의 ApplicationContext Object가 만들어진다. 
+            이를 통칭해서 spring container라고 부른다.
+        
+            객체를 관리하는 컨테이너
+         
+      . spring framework : IoC container, application context를 포함해서 스프링에서 제공하는 모든 기능을 통칭   
+     
+     
+     [AOP : 관점 지향 프로그래밍]
+      :기존 OOP를 보완 한 개념(핵심사항과 공통관심사항을 분리하여 구현)
+        
+      
+      AOP는 primary concern과 cross-cutting concern을 별도의 코드로 구현해서
+         최종적으로 이둘을 조합해서 완성하는 것
+      
+      # 주요 용어 (중요)
+      - 핵심관심 사항(core(primary) concern) : 비즈니스 로직(주 업무)
+      - 공통관심 사항(횡단관심사항 : cross-cutting concern) : 부가적인 기능(보조 업무) 
+        * 비즈니스 로직은 core + cross-cutting도 될 수 있다.
+      - Code : Primary Concern을 구현 코드  
+      - Advice: cross-cutting concern을 구현한 코드
+      - jointPoint: code와 advice를 연결해 주는 설정 정보, advice가 적용 가능한 지점(메소드 호출, 필드값 변경)
+      - Point-cut: JointPoint의 부분집합으로서 실제 advice가 적용되는 Jointpoint
+      - Weaving : Code, Advice, Point-cut등을 조합해서 어플리케이션을 만들어 가는 과정
+      
+      - Target : 핵심사항(core)이 구현된 객체 
+      AOP(Aspect Oriented Programming)의 Aspect는 Advice과 Point-cut을 함께 지칭하는 단어 
+     
+      * 스프링은 자체적인 프록시 기반의 AOP를 지원
+       	필드값 변경과 같은 Jointpoint는 사용할 수 없다.
+            메소드 호출 jointpoint만 지원한다.
+            스프링 AOP는 완전한 AOP를 지원하는 것이 목적이 아니라 엔터프라이즈 어플리케이션을 구현하는 데 필요한 정도의 기능 제공
+            을 목적으로 하고 있다.
+            
+      * AOP 구현
+        - 설정파일을 이용하는 방법(XML 스키마 기반의 구현방법)
+        - 어노테이션을 이용하는 방법(@AspectJ 어노테이션 기반의 AOP구현)
+      
+      * 스프링에서 AOP 구현 방법은 Proxy를 이용한다.
+      
+          client   ------>   proxy   --------> Target
+          (호출부)           (대리인/대행)          (핵심기능) 
+     
+      [XML 기반의 AOP 구현과정]
+      . 의존설정(pom.xml)
+        <!-- AOP -->
+        <dependency>
+        	<gropuId>org.aspectj</groupId>
+        	<artifactId>aspectjweaver</artifactId>
+        	<version>1.7.4</version>        
+        </dependency>  
+      
+      . 공통기능 클래스 제작 -Advice 역할 클래스
+      
+      . XML파일에 Aspect
+        
+      [Advice 실행 종류]
+      <aop:before> : 핵심기능이 실행 되기 전엔 advice를 실행한다.
+      <aop:after-returning> : 정상적으로 핵심기능 실행 후에 advice를 실행
+      <aop:after-throwing> : 핵심기능 실행 중에 exception이 발생 시 advice를 실행
+      <aop:after> : 핵심기능 실행 후에 advice를 실행한다.(exception이 발생하더라도..)
+      <aop:around> : 핵심기능 실행 전/후 및 exception 발생시 advice 실행
+     
+     [AspectJ Pointcut 표현식]
+	     Pointcut을 지정할 때 사용하는 표현식으로 AspectJ문법을 사용한다.
+	     
+	     *  : 모든 
+	     .  : 현재
+	     .. : 0개이상
+	    
+	    
+	     execution : ("execution(public void get*(..))") //public void인 모든 get메소드(인자가 0개 또는 그이상)
+	               : ("execution(* com.test.aop.*.*())") //com.test.aop 패키지에 파라미터가 없는 모든 메소드         
+	               : ("execution(* com.test.aop..*.*())") // com.test.aop패키지 & com.test.aop 하위 패키지에 
+	                                                                                     파라미터가 없는 모든 메소드
+	               : ("execution(* com.test.aop.Staff.*())") //com.test.aop.Staff안의 모든 메소드                                                                           
+	    
+	     within : ("within(com.test.aop.*)") //com.test.aop패키지 안에 있는 모든 메소드 	 
+		        : ("within(com.test.aop..*)") //com.test.aop패키지 및 하위 패키지 안에 있는 모든 메소드
+		        : ("within(com.test.aop.Staff)") //com.test.aop.Staff 모든 메소드
+		        
+		 bean   : ("bean(staff)") //staff 빈에만 적용
+		          ("bean(*er)")   // ~er로 끝나는 빈에만 적용
+		          
+	 [@Aspect를 이용한 AOP 구현] 	                 
+	   - 의존설절(pom.xml)
+	   - @Aspect 어노테이션을 이용한 Aspect 클래스를 제작
+	   - XML파일에 <aop:aspectj-autoproxy /> 설정
+	   
+	   ----------Aspect Class--------
+	   
+	             @Pointcut
+	             
+	             @Around
+	             @Before
+	             @AfterReturning
+	             @AfterThrowing
+	             @After
+	             
+	   
+	                  
+	
